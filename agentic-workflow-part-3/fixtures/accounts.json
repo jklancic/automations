@@ -1,0 +1,7 @@
+{
+  "accounts": [
+    {"id": "ACCT-101", "tier": "premium", "entitlements": ["support_portal", "priority_support"], "history": ["Registered email is active.", "No unresolved login tickets."]},
+    {"id": "ACCT-202", "tier": "standard", "entitlements": ["support_portal"], "history": ["Subscription payment recorded last month."]},
+    {"id": "ACCT-303", "tier": "enterprise", "entitlements": ["support_portal", "workspace_admin"], "history": ["Custom hardware-key integration reported; no recovery procedure on record."]}
+  ]
+}

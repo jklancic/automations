@@ -112,7 +112,7 @@ The model may select retrieval queries and refine them within the retrieval stag
 - Unknown classifications and nonexistent citations cannot proceed to a normal draft. Invalid structured responses or invalid references follow the shared technical-failure policy.
 - If the retrieval budget ends without sufficient evidence, escalate; do not fabricate an answer.
 
-Allow at most three retrieval tool calls by default, including query refinements. Keep the limit configurable and documented. Bundle an answerable ticket, a mandatory-escalation ticket, and a ticket lacking sufficient documentation.
+Allow at most three retrieval tool calls by default, including the code-owned account lookup and AI-selected knowledge searches/refinements. The model may finish retrieval early but cannot choose another stage. Keep the limit configurable and documented. Bundle an answerable ticket, a mandatory-escalation ticket, and a ticket lacking sufficient documentation.
 
 ## Agent: incident investigation
 

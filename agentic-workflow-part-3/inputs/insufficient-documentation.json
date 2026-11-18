@@ -1,0 +1,7 @@
+{
+  "id": "TICKET-303",
+  "account_id": "ACCT-303",
+  "customer_tier": "enterprise",
+  "subject": "Offline hardware-key recovery for a regional workspace",
+  "body": "Our regional workspace uses a custom offline hardware-key integration. The key is unavailable. Can you provide its recovery procedure? Standard password-reset instructions do not solve this issue."
+}

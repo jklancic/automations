@@ -9,7 +9,7 @@ The examples use SAP AI SDK and a local AI proxy. They favor readable code and v
 | Approach | Scenario | Code controls | AI decides | Status |
 | --- | --- | --- | --- | --- |
 | [Deterministic workflow](deterministic-workflow-session-2/README.md) | Invoice approval | Every stage, exception branch, and routing rule | Field extraction inside one fixed step | Implemented |
-| [Agentic workflow](agentic-workflow-part-3/README.md) | Support-ticket triage and draft replies | Fixed stages, permitted branches, escalation, and review | Bounded classification, retrieval, evidence assessment, and drafting | Specified; not implemented |
+| [Agentic workflow](agentic-workflow-part-3/README.md) | Support-ticket triage and draft replies | Fixed stages, permitted branches, escalation, and review | Bounded classification, retrieval, evidence assessment, and drafting | Implemented |
 | [Agent](agent-part-4/README.md) | Incident investigation | Permissions, validation, execution limits, and safety checks | Next permitted tool or conclusion, based on observations | Specified; not implemented |
 
 **Deterministic does not mean identical AI output.** It means code owns process control: identical extracted fields and reference data produce identical invoice routing. Calling an LLM or using a tool alone does not make a system an agent.
@@ -32,16 +32,29 @@ Configure your shell using the [invoice setup instructions](deterministic-workfl
 - `AI_MODEL`: an available OpenAI-compatible chat model.
 - `AI_PROXY_URL`: defaults to `http://localhost:6655/openai/v1`.
 
-[`.env.example`](.env.example) lists configuration variables. **The application does not automatically load `.env` files**; variables must be supplied through the process environment.
+[`.env.example`](.env.example) lists configuration variables. You can either export them in your shell or create a root `.env` file with your actual key and model. **The application does not load `.env` itself**; `uv run --env-file .env` loads it into the process environment. The file is ignored by Git.
 
-Then select one sample invoice:
+With a configured `.env`, select one sample invoice:
 
 ```sh
-uv run --locked python deterministic-workflow-session-2/run.py \
+uv run --locked --env-file .env python deterministic-workflow-session-2/run.py \
   deterministic-workflow-session-2/inputs/auto-approval.txt
 ```
 
+Omit `--env-file .env` if your variables are already exported. Activating `.venv` alone does not load `.env`.
+
 Other bundled inputs demonstrate simulated manager review and a duplicate-invoice exception. See the [invoice README](deterministic-workflow-session-2/README.md) for their commands, expected outcomes, business rules, and code map.
+
+## Next: agentic support workflow
+
+Use the same environment and proxy configuration:
+
+```sh
+uv run --locked --env-file .env python agentic-workflow-part-3/run.py \
+  agentic-workflow-part-3/inputs/answerable.json
+```
+
+The model chooses knowledge queries and assesses evidence within code-owned stages. The result is a draft queued for human review, never a sent reply. Other samples demonstrate mandatory escalation and insufficient documentation. See the [support README](agentic-workflow-part-3/README.md) for the retrieval budget, input format, and comparison with both alternatives.
 
 Live execution uses the real proxy. Missing configuration or a failed request produces a technical failure, never a silent fallback to fake AI. SDK request construction is tested offline; end-to-end live execution requires your key and model configuration.
 
@@ -64,9 +77,9 @@ All business data is synthetic and local. Approvals, review queues, and recommen
 uv run --locked pytest -q
 ```
 
-The current suite covers the invoice workflow and its SAP SDK adapter. Tests block real network connections and use stubbed extraction responses or an in-memory HTTP transport, so no credentials or proxy are required.
+The current suite covers both implemented workflows and their shared SAP SDK transport. Tests block real network connections and use stubbed extraction responses or an in-memory HTTP transport, so no credentials or proxy are required.
 
-One root [`pyproject.toml`](pyproject.toml) and [`uv.lock`](uv.lock) manage the shared environment, including `sap-ai-sdk-gen==7.4.1`. Orchestration and domain logic remain inside each approach's folder; no additional agent framework is used.
+One root [`pyproject.toml`](pyproject.toml) and [`uv.lock`](uv.lock) manage the shared environment, including `sap-ai-sdk-gen==7.4.1`. [`demo_common/`](demo_common/) contains reusable proxy configuration, SDK transport, safe errors, and terminal/artifact formatting. Orchestration and domain logic remain inside each approach's folder; no additional agent framework is used.
 
 ## Documentation map
 

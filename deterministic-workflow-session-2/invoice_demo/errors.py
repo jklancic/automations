@@ -1,7 +1,3 @@
-"""Safe error messages: never expose raw SDK exceptions or model payloads."""
+"""Safe errors shared with the other demonstrations."""
 
-
-class DemoError(Exception):
-    def __init__(self, code: str, message: str):
-        super().__init__(message)
-        self.code = code
+from demo_common.errors import DemoError as DemoError

@@ -23,17 +23,17 @@ export AI_PROXY_API_KEY
 
 The key belongs to the **local proxy**, not an SAP AI Core service key. Select an available OpenAI-compatible chat model supporting JSON-object responses and `max_completion_tokens`; no model name is hardcoded. SAP `cohere--` aliases are rejected because that SDK compatibility path removes the output-token cap. The example key prompt above uses Bash. In other shells, use their equivalent hidden-input mechanism; never commit the key or put it in a command saved in shell history.
 
-`.env.example` lists the configuration variables; the application does **not** automatically load `.env` files. Use a loopback proxy URL without embedded credentials, query parameters, or fragments. Defaults are a 30-second request timeout and a 512-token output cap, configurable through positive finite `AI_TIMEOUT_SECONDS` and positive integer `AI_MAX_OUTPUT_TOKENS`. There is one extraction request and no automatic retry.
+`.env.example` lists the configuration variables; the application does **not** automatically load `.env` files. If you store settings in a root `.env`, add `--env-file .env` to `uv run` so uv loads them into the process environment; activating `.venv` alone does not do this. Use a loopback proxy URL without embedded credentials, query parameters, or fragments. Defaults are a 30-second request timeout and a 512-token output cap, configurable through positive finite `AI_TIMEOUT_SECONDS` and positive integer `AI_MAX_OUTPUT_TOKENS`. There is one extraction request and no automatic retry.
 
 Select one bundled invoice:
 
 ```sh
-uv run --locked python deterministic-workflow-session-2/run.py deterministic-workflow-session-2/inputs/auto-approval.txt
-uv run --locked python deterministic-workflow-session-2/run.py deterministic-workflow-session-2/inputs/manager-review.txt
-uv run --locked python deterministic-workflow-session-2/run.py deterministic-workflow-session-2/inputs/exception.txt
+uv run --locked --env-file .env python deterministic-workflow-session-2/run.py deterministic-workflow-session-2/inputs/auto-approval.txt
+uv run --locked --env-file .env python deterministic-workflow-session-2/run.py deterministic-workflow-session-2/inputs/manager-review.txt
+uv run --locked --env-file .env python deterministic-workflow-session-2/run.py deterministic-workflow-session-2/inputs/exception.txt
 ```
 
-These are live-proxy commands, not offline simulations. SDK request construction is tested with an in-memory HTTP transport; an end-to-end live run requires your key and model configuration. If configuration is absent or the proxy fails, execution exits nonzero with a clear error rather than substituting fake AI.
+These commands assume a configured `.env`; omit `--env-file .env` if you used the shell exports above. They are live-proxy commands, not offline simulations. SDK request construction is tested with an in-memory HTTP transport; an end-to-end live run requires your key and model configuration. If configuration is absent or the proxy fails, execution exits nonzero with a clear error rather than substituting fake AI.
 
 | Sample | Fields used by the tests | Expected business outcome |
 | --- | --- | --- |
@@ -133,7 +133,8 @@ Tests block real network connections and use stubbed extraction responses or an 
 - [`run.py`](run.py), [`invoice_demo/cli.py`](invoice_demo/cli.py): one-file CLI and exit status.
 - [`invoice_demo/workflow.py`](invoice_demo/workflow.py): fixed orchestration and exception branches.
 - [`invoice_demo/domain.py`](invoice_demo/domain.py): structured fields and code-owned validation/matching/routing.
-- [`invoice_demo/extraction.py`](invoice_demo/extraction.py): configuration, minimal local-proxy adapter, and the single SAP SDK request.
-- [`invoice_demo/artifacts.py`](invoice_demo/artifacts.py): terminal story, safe summaries, and per-run artifacts.
+- [`invoice_demo/extraction.py`](invoice_demo/extraction.py): invoice prompt and the single extraction request through shared SDK transport.
+- [`invoice_demo/artifacts.py`](invoice_demo/artifacts.py): compatibility import for shared terminal/artifact formatting.
+- [`demo_common/`](../demo_common/): proxy configuration and adapter, SDK transport, safe errors, and terminal/artifact infrastructure. No invoice orchestration is shared.
 
 Authoritative shared behavior and acceptance checks: [`docs/automations.spec`](../docs/automations.spec). SDK integration was verified against [SAP's documentation](https://help.sap.com/doc/generative-ai-hub-sdk/CLOUD/en-US/index.html) and the installed 7.4.1 source; the local route is the supplied HAI `/openai/v1` endpoint.

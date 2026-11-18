@@ -1,0 +1,8 @@
+{
+  "articles": [
+    {"id": "KB-RESET", "product_area": "accounts", "approved": true, "title": "Reset a forgotten password", "content": "From the demo support portal sign-in page, select Forgot password. Enter your registered email address, then follow the reset link sent to that address. Never share your password or reset link with support."},
+    {"id": "KB-BILLING", "product_area": "billing", "approved": true, "title": "Billing refunds and policy exceptions", "content": "Billing refunds and requests for exceptions require a human billing specialist. Support automation may collect the request but cannot promise a refund or grant an exception."},
+    {"id": "KB-WORKSPACE", "product_area": "workspace", "approved": true, "title": "Invite a workspace member", "content": "Workspace administrators can invite members from Settings, Members, Invite. This article does not document offline hardware-key recovery."},
+    {"id": "KB-UNAPPROVED", "product_area": "workspace", "approved": false, "title": "Draft offline hardware-key recovery notes", "content": "Unverified draft instructions. Not approved for customer replies."}
+  ]
+}

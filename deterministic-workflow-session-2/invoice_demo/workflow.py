@@ -55,7 +55,7 @@ def run_invoice(input_path: Path, *, extract: Callable[[str], str] | None = None
                 output_root: Path = DEFAULT_OUTPUT_ROOT,
                 reference_path: Path = REFERENCE_PATH,
                 stream: TextIO | None = None) -> Run:
-    story = Story(output_root, stream)
+    story = Story(output_root, stream, prefix="invoice-")
     result = {
         "approach": "deterministic_workflow",
         "input_reference": str(input_path),

@@ -4,7 +4,7 @@
 
 Demonstrate the difference between deterministic workflows, agentic workflows, and agents through three small Python applications. The learning goal is to identify who controls the next action, not to build production business applications.
 
-This document defines required behavior and acceptance checks. `AGENTS.md` provides repository-wide coding guidance. Folder READMEs explain scenarios and, once implemented, verified setup, execution, and sample outcomes. These requirements describe the intended demonstrations; they do not claim implementation already exists.
+This document defines required behavior and acceptance checks. `AGENTS.md` provides repository-wide coding guidance. Folder READMEs explain scenarios, verified setup, execution, and sample outcomes. Implementation status is recorded in the root README.
 
 The initial scope excludes PDF/OCR processing, interactive file selection, batch processing, real business-system integration, and production-changing actions. Exact module names, terminal colors, and prompt wording are implementation choices, provided they preserve this contract.
 
@@ -125,8 +125,8 @@ Read-only tools cover local metrics, logs, deployment history/diffs, runbooks, a
 ### Limits and completion
 
 - Default maximum: eight investigation tool calls and ten model turns. Count every model request as a turn and every tool invocation separately, including multiple calls requested in one turn.
-- Limits are configurable, documented, and enforced by Python. No call may exceed the configured budget.
-- A validated conclusion may finish the run before the limits.
+- Limits are configurable, documented, and enforced by Python. No call may exceed the configured budget. Tool batches are validated before execution; a batch exceeding the remaining tool budget produces an incomplete result without partial execution.
+- A validated conclusion may finish the run before the limits, including on the final permitted model turn. No extra model request is made after either investigation budget is exhausted.
 - A conclusion may explicitly state that no defensible hypothesis can be formed.
 - Reaching a limit without a validated conclusion produces an incomplete result, preserving observed evidence and unresolved questions; it must not invent a root cause.
 

@@ -1,0 +1,42 @@
+{
+  "incidents": [
+    {
+      "id": "INC-101",
+      "region": "EU-West",
+      "allowed_services": ["checkout", "payments"],
+      "records": [
+        {"id": "METRIC-CHECKOUT-101", "service": "checkout", "tool": "get_metrics", "summary": "Checkout p95 latency increased to 2400 ms against a 250 ms SLO; error rate is 12%.", "data": {"p95_latency_ms": 2400, "slo_ms": 250, "error_rate_percent": 12, "observed_at": "2026-11-18T08:10:00Z"}},
+        {"id": "METRIC-PAYMENTS-101", "service": "payments", "tool": "get_metrics", "summary": "Payments metrics remain within SLO during the checkout incident.", "data": {"p95_latency_ms": 120, "slo_ms": 250, "error_rate_percent": 0.1}},
+        {"id": "LOG-CHECKOUT-POOL", "service": "checkout", "tool": "search_logs", "summary": "Connection pool exhausted errors began after checkout version 2.8 was deployed.", "data": {"pattern": "connection pool exhausted", "first_seen": "2026-11-18T08:02:00Z", "version": "2.8"}},
+        {"id": "DEPLOY-CHECKOUT-28", "service": "checkout", "tool": "get_deployments", "summary": "Checkout version 2.8 was deployed at 08:00 UTC; the previous stable version was 2.7.", "data": {"deployment_id": "deploy-checkout-28", "version": "2.8", "previous_version": "2.7", "deployed_at": "2026-11-18T08:00:00Z"}},
+        {"id": "DIFF-CHECKOUT-28", "service": "checkout", "tool": "get_deployment_diff", "summary": "Deployment 2.8 reduced the database connection pool from 100 to 5.", "data": {"deployment_id": "deploy-checkout-28", "connection_pool_size": {"before": 100, "after": 5}}},
+        {"id": "RUNBOOK-CHECKOUT-101", "service": "checkout", "tool": "get_runbook", "summary": "For release-correlated pool exhaustion, ask the on-call owner to review rollback to the stable version. Automation must not perform it.", "data": {"human_review_required": true, "action": "Review rollback to version 2.7 using the incident change process."}},
+        {"id": "DEPENDENCY-CHECKOUT-101", "service": "checkout", "tool": "get_dependencies", "summary": "Checkout depends on payments.", "data": {"dependencies": ["payments"]}}
+      ]
+    },
+    {
+      "id": "INC-202",
+      "region": "EU-West",
+      "allowed_services": ["checkout", "payments"],
+      "records": [
+        {"id": "METRIC-CHECKOUT-202", "service": "checkout", "tool": "get_metrics", "summary": "Checkout requests are slow and contain downstream payment timeouts.", "data": {"p95_latency_ms": 1800, "error_rate_percent": 8}},
+        {"id": "DEPENDENCY-CHECKOUT-202", "service": "checkout", "tool": "get_dependencies", "summary": "Checkout calls payments synchronously; investigate payments when checkout reports gateway timeouts.", "data": {"dependencies": ["payments"]}},
+        {"id": "METRIC-PAYMENTS-202", "service": "payments", "tool": "get_metrics", "summary": "Payments gateway latency is 1600 ms and retries increased sharply.", "data": {"p95_latency_ms": 1600, "gateway_retries_per_minute": 900}},
+        {"id": "LOG-PAYMENTS-RETRY", "service": "payments", "tool": "search_logs", "summary": "Gateway retry storm and upstream gateway timeout errors occur in payments.", "data": {"pattern": "gateway retry storm", "upstream_status": "timeout"}},
+        {"id": "DEPLOY-PAYMENTS-202", "service": "payments", "tool": "get_deployments", "summary": "Payments has no deployment near the incident; its stable release is unchanged.", "data": {"deployment_id": "deploy-payments-stable", "version": "3.4", "deployed_at": "2026-11-01T10:00:00Z"}},
+        {"id": "RUNBOOK-PAYMENTS-202", "service": "payments", "tool": "get_runbook", "summary": "Coordinate gateway-provider investigation and have the payments owner review retry/backoff settings; do not roll back merely because checkout is slow.", "data": {"human_review_required": true, "action": "Escalate to the payments owner and gateway provider."}}
+      ]
+    },
+    {
+      "id": "INC-303",
+      "region": "EU-West",
+      "allowed_services": ["inventory"],
+      "records": [
+        {"id": "METRIC-INVENTORY-GAP", "service": "inventory", "tool": "get_metrics", "summary": "Inventory telemetry has a collection gap; available samples do not establish an error trend or cause.", "data": {"collection_status": "incomplete", "reliable_error_rate": null}},
+        {"id": "DEPLOY-INVENTORY-303", "service": "inventory", "tool": "get_deployments", "summary": "The latest inventory release predates the alert and no deployment correlation is established.", "data": {"deployment_id": "deploy-inventory-stable", "version": "1.9", "deployed_at": "2026-10-20T09:00:00Z"}},
+        {"id": "RUNBOOK-INVENTORY-303", "service": "inventory", "tool": "get_runbook", "summary": "When telemetry is incomplete, escalate to on-call to restore collection and obtain current logs before attributing a cause.", "data": {"human_review_required": true, "action": "Collect reliable telemetry and request human investigation."}},
+        {"id": "DEPENDENCY-INVENTORY-303", "service": "inventory", "tool": "get_dependencies", "summary": "No dependencies are documented in this local snapshot.", "data": {"dependencies": []}}
+      ]
+    }
+  ]
+}

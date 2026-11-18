@@ -10,7 +10,7 @@ The examples use SAP AI SDK and a local AI proxy. They favor readable code and v
 | --- | --- | --- | --- | --- |
 | [Deterministic workflow](deterministic-workflow-session-2/README.md) | Invoice approval | Every stage, exception branch, and routing rule | Field extraction inside one fixed step | Implemented |
 | [Agentic workflow](agentic-workflow-part-3/README.md) | Support-ticket triage and draft replies | Fixed stages, permitted branches, escalation, and review | Bounded classification, retrieval, evidence assessment, and drafting | Implemented |
-| [Agent](agent-part-4/README.md) | Incident investigation | Permissions, validation, execution limits, and safety checks | Next permitted tool or conclusion, based on observations | Specified; not implemented |
+| [Agent](agent-part-4/README.md) | Incident investigation | Permissions, validation, execution limits, and safety checks | Next permitted tool or conclusion, based on observations | Implemented |
 
 **Deterministic does not mean identical AI output.** It means code owns process control: identical extracted fields and reference data produce identical invoice routing. Calling an LLM or using a tool alone does not make a system an agent.
 
@@ -56,13 +56,24 @@ uv run --locked --env-file .env python agentic-workflow-part-3/run.py \
 
 The model chooses knowledge queries and assesses evidence within code-owned stages. The result is a draft queued for human review, never a sent reply. Other samples demonstrate mandatory escalation and insufficient documentation. See the [support README](agentic-workflow-part-3/README.md) for the retrieval budget, input format, and comparison with both alternatives.
 
+## Finally: incident investigation agent
+
+Use the same environment and proxy configuration:
+
+```sh
+uv run --locked --env-file .env python agent-part-4/run.py \
+  agent-part-4/inputs/deployment-related.json
+```
+
+The model chooses among metrics, logs, deployments/diffs, runbooks, and dependencies based on observations—not a predefined investigation sequence. Code enforces read-only scope, evidence references, eight tool calls and ten model turns by default. Conclusions are recommendations only; inconclusive and budget-limited results remain explicit. See the [agent README](agent-part-4/README.md) for the other samples, tool schema, and guardrails.
+
 Live execution uses the real proxy. Missing configuration or a failed request produces a technical failure, never a silent fallback to fake AI. SDK request construction is tested offline; end-to-end live execution requires your key and model configuration.
 
 ## Watch the code's story
 
 Terminal output distinguishes application decisions from AI contributions:
 
-- `[CODE]`: fixed stages, validation, policy checks, and routing.
+- `[CODE]`: application-controlled transitions, validation, policy checks, routing, and execution limits.
 - `[AI]`: request purpose and validated extracted fields or other model contributions.
 - `[TOOL]`: local lookups or tool activity, with ownership explained by the approach.
 - `[RESULT]`: final outcome and artifact location.
@@ -77,7 +88,7 @@ All business data is synthetic and local. Approvals, review queues, and recommen
 uv run --locked pytest -q
 ```
 
-The current suite covers both implemented workflows and their shared SAP SDK transport. Tests block real network connections and use stubbed extraction responses or an in-memory HTTP transport, so no credentials or proxy are required.
+The suite covers all three approaches and their shared SAP SDK transport. Tests block real network connections and use stubbed model decisions or an in-memory HTTP transport, so no credentials or proxy are required.
 
 One root [`pyproject.toml`](pyproject.toml) and [`uv.lock`](uv.lock) manage the shared environment, including `sap-ai-sdk-gen==7.4.1`. [`demo_common/`](demo_common/) contains reusable proxy configuration, SDK transport, safe errors, and terminal/artifact formatting. Orchestration and domain logic remain inside each approach's folder; no additional agent framework is used.
 

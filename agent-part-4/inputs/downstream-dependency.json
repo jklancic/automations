@@ -1,0 +1,6 @@
+{
+  "id": "INC-202",
+  "service": "checkout",
+  "region": "EU-West",
+  "summary": "Checkout requests are timing out. There is no obvious checkout release correlation. Investigate relevant dependencies as needed."
+}

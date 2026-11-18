@@ -1,0 +1,6 @@
+{
+  "id": "INC-101",
+  "service": "checkout",
+  "region": "EU-West",
+  "summary": "Checkout latency and error rate increased around the latest release. Investigate the cause and recommend a human-reviewed next action."
+}

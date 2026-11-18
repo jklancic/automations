@@ -18,3 +18,5 @@ def no_network(monkeypatch):
     monkeypatch.delenv("AI_TIMEOUT_SECONDS", raising=False)
     monkeypatch.delenv("AI_MAX_OUTPUT_TOKENS", raising=False)
     monkeypatch.delenv("SUPPORT_MAX_RETRIEVAL_CALLS", raising=False)
+    monkeypatch.delenv("AGENT_MAX_TOOL_CALLS", raising=False)
+    monkeypatch.delenv("AGENT_MAX_MODEL_TURNS", raising=False)

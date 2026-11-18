@@ -1,0 +1,6 @@
+{
+  "id": "INC-303",
+  "service": "inventory",
+  "region": "EU-West",
+  "summary": "An intermittent inventory error alert fired, but telemetry may be incomplete. Do not claim a root cause without defensible evidence."
+}

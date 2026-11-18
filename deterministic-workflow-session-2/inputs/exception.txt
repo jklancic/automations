@@ -1,0 +1,8 @@
+SYNTHETIC INVOICE — FOR DEMONSTRATION ONLY
+
+Vendor: Fabrikam Maintenance
+Invoice number: INV-2026-303
+Amount due: EUR 900.00
+Due date: 2026-12-22
+
+Description: Maintenance service. This invoice has already been recorded.

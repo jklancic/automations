@@ -1,0 +1,8 @@
+SYNTHETIC INVOICE — FOR DEMONSTRATION ONLY
+
+Vendor: Contoso Training
+Invoice number: INV-2026-202
+Amount due: EUR 1500.00
+Due date: 2026-12-20
+
+Description: Python training workshop for the team.

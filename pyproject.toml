@@ -1,0 +1,30 @@
+[project]
+name = "automation-control-demos"
+version = "0.1.0"
+description = "Visible examples of deterministic workflows, agentic workflows, and agents"
+requires-python = ">=3.12,<3.13"
+dependencies = [
+    "sap-ai-sdk-gen==7.4.1",
+    "pydantic>=2.12,<2.13",
+    "httpx>=0.27,<1",
+    # SAP SDK 7.4.1 uses httpx; OpenAI 3 switched to httpx2.
+    "openai>=2.45,<3",
+]
+
+[dependency-groups]
+dev = ["pytest>=8,<10"]
+
+[tool.uv]
+package = false
+
+[tool.pytest.ini_options]
+testpaths = ["deterministic-workflow-session-2/tests"]
+pythonpath = ["deterministic-workflow-session-2"]
+addopts = "-ra"
+
+[tool.ruff]
+target-version = "py312"
+src = ["deterministic-workflow-session-2"]
+
+[tool.ruff.lint]
+select = ["E4", "E7", "E9", "F", "I", "UP", "B", "BLE"]

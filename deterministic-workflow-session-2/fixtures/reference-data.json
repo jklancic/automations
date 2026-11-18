@@ -1,0 +1,10 @@
+{
+  "purchase_orders": [
+    {"id": "PO-101", "vendor": "Northwind Office Supplies", "amount": "750.00", "currency": "EUR"},
+    {"id": "PO-202", "vendor": "Contoso Training", "amount": "1500.00", "currency": "EUR"},
+    {"id": "PO-303", "vendor": "Fabrikam Maintenance", "amount": "900.00", "currency": "EUR"}
+  ],
+  "recorded_invoices": [
+    {"vendor": "Fabrikam Maintenance", "invoice_number": "INV-2026-303"}
+  ]
+}

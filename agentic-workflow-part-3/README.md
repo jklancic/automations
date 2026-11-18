@@ -12,14 +12,16 @@ Controlled flow:
 
 3. Retrieve account history, entitlements, and relevant knowledge-base articles.
 
-4. Decide whether the case is answerable from approved documentation.
+4. Assess whether approved local documentation provides sufficient evidence.
 
-5. Draft a response with citations.
+5. Escalate when evidence is insufficient, the issue is billing/legal, or the customer asks for an exception. Application code enforces these branches; no numerical model-confidence threshold is used.
 
-6. If confidence is low, the issue is billing/legal, or the customer asks for an exception, escalate to a human.
+6. Otherwise, draft a response with valid documentation citations.
 
-7. Queue the draft for support-agent review before sending.
+7. Queue every draft for simulated support-agent review. Never send a customer message.
 
-Where agency appears: the model chooses which retrieval queries to run, decides whether the available documentation is sufficient, and determines whether an escalation branch is needed. But it cannot invent new stages, send email directly, or bypass approval.
+Where agency appears: the model chooses and refines retrieval queries within one bounded stage, classifies the ticket, and assesses whether available documentation is sufficient. Application code applies escalation policy to those validated assessments. The model cannot invent new stages, send email directly, or bypass approval.
 
-Why it is agentic but not an agent: the overall flow is predefined—classify, retrieve, draft, review, escalate—but the model has discretion at specified decision points.
+Why it is agentic but not an agent: the overall flow is predefined—classify, retrieve, assess, then escalate or draft for review—but the model has discretion at specified decision points. It cannot restart arbitrary stages.
+
+See [`docs/automations.spec`](../docs/automations.spec) for the authoritative behavioral contract and acceptance checks. Inputs and supporting data are synthetic local fixtures; review and escalation are local artifacts. This README describes the intended demonstration; execution instructions will be added after implementation.
